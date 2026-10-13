@@ -30,3 +30,4 @@ Refaça o to-do list
 - Tarefas organizadas em issues, agrupadas por milestone (uma por sprint)
 - eu adicionei os colaboradores.
 - Foram criadas os labels de modulo e de tipo, os milestone por sprints, atividade feita. 
+- feito a proteção do main.
