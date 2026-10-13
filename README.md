@@ -28,3 +28,4 @@ Refaça o to-do list
 - 12/10: repositório criado e colaboradores adicionados
 - Cronograma: 8 sprints, de 12/10 a 19/10
 - Tarefas organizadas em issues, agrupadas por milestone (uma por sprint)
+- eu adicionei os colaboradores.
