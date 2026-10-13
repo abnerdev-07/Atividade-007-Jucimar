@@ -29,3 +29,4 @@ Refaça o to-do list
 - Cronograma: 8 sprints, de 12/10 a 19/10
 - Tarefas organizadas em issues, agrupadas por milestone (uma por sprint)
 - eu adicionei os colaboradores.
+- Foram criadas os labels de modulo e de tipo, os milestone por sprints, atividade feita. 
