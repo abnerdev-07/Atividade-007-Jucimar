@@ -20,7 +20,7 @@ Refaça o to-do list
 
 ## Equipe
 - Abner Monteiro (líder)
-- Fulano
+- Anthony Figarella
 - Ciclano
 - Beltrano
 
