@@ -12,14 +12,14 @@ def init_db():
 	conn.executescript("""
 		CREATE TABLE IF NOT EXISTS contatos (
 			id	 INTEGER PRIMARY KEY AUTOINCREMENT,
-			nome	 TEXTO NOT NULL,
+			nome	 TEXT NOT NULL,
 			email	 TEXT,
 			telefone TEXT
 		);
 
 		CREATE TABLE IF NOT EXISTS tarefas (
 			id		INTEGER PRIMARY KEY AUTOINCREMENT,
-			descricao	TEXTO NOT NULL,
+			descricao	TEXT NOT NULL,
 			prazo		TEXT,
 			prioridade	TEXT NOT NULL DEFAULT 'media',
 			status		TEXT NOT NULL DEFAULT 'fazer',
