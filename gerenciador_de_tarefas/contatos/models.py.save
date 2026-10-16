@@ -1,0 +1,71 @@
+CONTATOS = [
+    {"id": 1, "nome": "Matheus", "email": "matheus@email.com", "telefone": "92 99999-9999"},
+    {"id": 2, "nome": "Abner", "email": "abner@email.com", "telefone": "92 99999-9999"},
+    {"id": 3, "nome": "Aline", "email": "aline@email.com", "telefone": "92 99999-9999"},
+    # Dados fixos (rascunho). Depois serão trocados por consultas ao SQLite.
+CONTATOS = [
+    {"id": 1, "nome": "Maria Silva", "email": "maria@email.com", "telefone": "92 99999-0001"},
+    {"id": 2, "nome": "João Souza", "email": "joao@email.com", "telefone": "92 99999-0002"},
+    {"id": 3, "nome": "Ana Lima", "email": "ana@email.com", "telefone": "92 99999-0003"},
+]
+
+
+def listar_contatos():
+    """Devolve a lista de todos os contatos (lista de dicionários)."""
+    return CONTATOS
+
+
+def buscar_contato(contato_id):
+    """Recebe um id e devolve o contato (dicionário), ou None se não existir."""
+    for contato in CONTATOS:
+        if contato["id"] == contato_id:
+            return contato
+    return None
+
+
+def criar_contato(nome, email=None, telefone=None):
+    """Recebe os dados e devolve o contato criado (dicionário), com um id novo."""
+    return {"id": 4, "nome": nome, "email": email, "telefone": telefone}
+
+
+def atualizar_contato(contato_id, nome, email=None, telefone=None):
+    """Recebe o id e os novos dados. Devolve o contato atualizado, ou None se o id não existir."""
+    if buscar_contato(contato_id) is None:
+        return None
+    return {"id": contato_id, "nome": nome, "email": email, "telefone": telefone}
+
+
+def excluir_contato(contato_id):
+    """Recebe um id. Devolve True se o contato existia, False se não."""
+    return buscar_contato(contato_id) is not None
+]
+
+
+def listar_contatos():
+    """Devolve a lista de todos os contatos (lista de dicionários)."""
+    return CONTATOS
+
+
+def buscar_contato(contato_id):
+    """Recebe um id e devolve o contato (dicionário), ou None se não existir."""
+    for contato in CONTATOS:
+        if contato["id"] == contato_id:
+            return contato
+    return None
+
+
+def criar_contato(nome, email=None, telefone=None):
+    """Recebe os dados e devolve o contato criado (dicionário), com um id novo."""
+    return {"id": 4, "nome": nome, "email": email, "telefone": telefone}
+
+
+def atualizar_contato(contato_id, nome, email=None, telefone=None):
+    """Recebe o id e os novos dados. Devolve o contato atualizado, ou None se o id não existir."""
+    if buscar_contato(contato_id) is None:
+        return None
+    return {"id": contato_id, "nome": nome, "email": email, "telefone": telefone}
+
+
+def excluir_contato(contato_id):
+    """Recebe um id. Devolve True se o contato existia, False se não."""
+    return buscar_contato(contato_id) is not None
