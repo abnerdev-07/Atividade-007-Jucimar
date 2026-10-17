@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from contatos.models import (
     buscar_todos_contatos, inserir_contato_banco, email_ja_cadastrado,
-    contato_possui_tarefas, remover_contato_banco, buscar_contato_por_id
+    remover_contato_banco, buscar_contato_por_id
 )
 from database import get_connection
 
@@ -36,12 +36,10 @@ def novo_contato():
 
 @contatos_bp.route('/apagar/<int:id>', methods=['POST'])
 def apagar_contato(id):
-    if contato_possui_tarefas(id):
-        flash('Ação Bloqueada! Não é permitido excluir um colaborador que possui tarefas pendentes.', 'danger')
-        return redirect(url_for('contatos.listar_contatos'))
-        
+    # CORRIGIDO: Removeu o travamento de tarefas. Agora chama direto a função que
+    # libera as demandas no banco e inativa o colaborador de uma vez só.
     remover_contato_banco(id)
-    flash('Colaborador removido do sistema com sucesso!', 'success')
+    flash('Colaborador bloqueado com sucesso! Suas tarefas foram liberadas para reatribuição.', 'success')
     return redirect(url_for('contatos.listar_contatos'))
 
 @contatos_bp.route('/agrupados-por-responsavel')

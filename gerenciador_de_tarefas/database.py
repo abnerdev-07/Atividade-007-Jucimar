@@ -12,11 +12,12 @@ def init_db():
     conn = get_connection()
     conn.executescript("""
         CREATE TABLE IF NOT EXISTS contatos (
-            id       INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome     TEXT NOT NULL,
-            email    TEXT,
-            telefone TEXT
-        );
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome     TEXT NOT NULL,
+    email    TEXT,
+    telefone TEXT,
+    status   TEXT NOT NULL DEFAULT 'ativo'
+);
 
         CREATE TABLE IF NOT EXISTS tarefas (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +26,7 @@ def init_db():
             prioridade  TEXT NOT NULL DEFAULT 'media',
             status      TEXT NOT NULL DEFAULT 'fazer',
             contato_id  INTEGER,
-             FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE SET NULL
+            FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE SET NULL
         );
     """)
     conn.commit()

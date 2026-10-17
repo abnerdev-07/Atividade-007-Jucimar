@@ -4,7 +4,8 @@ from database import get_connection
 def buscar_todos_contatos():
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM contatos ORDER BY nome ASC")
+    
+    cursor.execute("SELECT * FROM contatos WHERE status = 'ativo' ORDER BY nome ASC")
     contatos = cursor.fetchall()
     conn.close()
     return contatos
@@ -46,6 +47,10 @@ def contato_possui_tarefas(contato_id):
 def remover_contato_banco(contato_id):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM contatos WHERE id = ?", (contato_id,))
+    
+    cursor.execute("UPDATE tarefas SET contato_id = NULL WHERE contato_id = ?", (contato_id,))
+    
+    cursor.execute("UPDATE contatos SET status = 'bloqueado' WHERE id = ?", (contato_id,))
+    
     conn.commit()
     conn.close()
