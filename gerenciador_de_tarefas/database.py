@@ -25,7 +25,7 @@ def init_db():
             prioridade  TEXT NOT NULL DEFAULT 'media',
             status      TEXT NOT NULL DEFAULT 'fazer',
             contato_id  INTEGER,
-            FOREIGN KEY (contato_id) REFERENCES contatos(id)
+             FOREIGN KEY (contato_id) REFERENCES contatos(id) ON DELETE SET NULL
         );
     """)
     conn.commit()
