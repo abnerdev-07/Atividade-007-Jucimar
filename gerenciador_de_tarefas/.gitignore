@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+venv/
+__pycache__/
+*.pyc
+*.db
+=======
 
 # Ambientes virtuais Python
 venv/
@@ -30,3 +36,4 @@ todo.db
 
 # Cache de testes
 .pytest_cache/
+>>>>>>> 122ffedf4754eedf386ebcf447f26304f7a23146
