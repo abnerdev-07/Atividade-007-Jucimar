@@ -14,3 +14,20 @@ Refaça o to-do list
 **obs1: selecionem, com sabedoria, um líder para o grupo. o lider do projeto é responsável pela entrega do trabalho e pelas atividades** **dosmembros. ele deverá conferir se os membros estão executando suas tarefas no dia/hora marcados**
 
 **obs2: sem commit importante, sem nota**
+
+
+# Gerenciador de Tarefas (Atividade 007)
+
+## Equipe
+- Abner Monteiro (líder)
+- Anthony Figarella
+- Aline Miranda
+- Beltrano
+
+## Organização
+- 12/10: repositório criado e colaboradores adicionados
+- Cronograma: 8 sprints, de 12/10 a 19/10
+- Tarefas organizadas em issues, agrupadas por milestone (uma por sprint)
+- eu adicionei os colaboradores.
+- Foram criadas os labels de modulo e de tipo, os milestone por sprints, atividade feita. 
+- feito a proteção do main.

@@ -1,4 +1,4 @@
-#contatos/models
+# contatos/models.py
 from database import get_connection
 
 def buscar_todos_contatos():
@@ -39,10 +39,13 @@ def email_ja_cadastrado(email):
 def contato_possui_tarefas(contato_id):
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) as total FROM tarefas WHERE contato_id = ?", (contato_id,))
+    cursor.execute(
+        "SELECT COUNT(*) AS total FROM tarefas_contatos WHERE contato_id = ?",
+        (contato_id,)
+    )
     resultado = cursor.fetchone()
     conn.close()
-    return resultado['total'] > 0
+    return resultado["total"] > 0
 
 def remover_contato_banco(contato_id):
     conn = get_connection()
