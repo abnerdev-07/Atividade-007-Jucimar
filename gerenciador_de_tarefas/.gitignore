@@ -1,0 +1,32 @@
+
+# Ambientes virtuais Python
+venv/
+.venv/
+env/
+mytest/
+
+# Cache e arquivos compilados do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Banco de dados SQLite
+todo.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Variáveis de ambiente e senhas
+.env
+.env.*
+
+# Configurações locais do VS Code
+.vscode/
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# Cache de testes
+.pytest_cache/
