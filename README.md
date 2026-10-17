@@ -21,7 +21,7 @@ Refaça o to-do list
 ## Equipe
 - Abner Monteiro (líder)
 - Anthony Figarella
-- Ciclano
+- Aline Miranda
 - Beltrano
 
 ## Organização
