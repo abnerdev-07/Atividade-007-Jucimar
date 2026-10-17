@@ -7,4 +7,4 @@ DATABASE = os.path.join(BASE_DIR, "todo.db")
 SECRET_KEY = "chave"
 
 STATUS_OPCOES = ["fazer", "fazendo", "feito", "atrasado"]
-PRIORIDADES = ["baixa", "media", "alta"]
+PRIORIDADES = ["media", "alta"]

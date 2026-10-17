@@ -1,0 +1,102 @@
+
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ "Editar tarefa" if tarefa else "Nova tarefa" }}</title>
+</head>
+
+<body>
+    <h1>{{ "Editar tarefa" if tarefa else "Nova tarefa" }}</h1>
+
+    <form method="POST">
+
+        <label for="descricao">Descrição:</label>
+        <input
+            type="text"
+            id="descricao"
+            name="descricao"
+            value="{{ tarefa.descricao if tarefa else '' }}"
+            required
+        >
+
+        <p>
+            <label for="prazo">Prazo:</label>
+            <input
+                type="date"
+                id="prazo"
+                name="prazo"
+                value="{{ tarefa.prazo if tarefa and tarefa.prazo else '' }}"
+            >
+        </p>
+
+        <p>
+            <label for="prioridade">Prioridade:</label>
+
+            <select id="prioridade" name="prioridade">
+                {% for prioridade in prioridades %}
+                    <option
+                        value="{{ prioridade }}"
+                        {{ 'selected' if tarefa and tarefa.prioridade == prioridade else '' }}
+                    >
+                        {{ prioridade|capitalize }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <p>
+            <label for="status">Status:</label>
+
+            <select id="status" name="status">
+                {% for opcao in status_opcoes %}
+                    <option
+                        value="{{ opcao }}"
+                        {{ 'selected' if tarefa and tarefa.status == opcao else '' }}
+                    >
+                        {{ opcao|capitalize }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+
+        <fieldset>
+            <legend>Contatos mencionados</legend>
+
+            {% if tarefa %}
+                {% set selecionados = tarefa.contatos | map(attribute='id') | list %}
+            {% else %}
+                {% set selecionados = [] %}
+            {% endif %}
+
+            {% for contato in contatos %}
+                <label>
+                    <input
+                        type="checkbox"
+                        name="contatos_ids"
+                        value="{{ contato.id }}"
+                        {{ 'checked' if contato.id in selecionados else '' }}
+                    >
+                    @{{ contato.nome }}
+                </label>
+                <br>
+            {% else %}
+                <p>Nenhum contato cadastrado.</p>
+            {% endfor %}
+        </fieldset>
+
+        <p>
+            <button type="submit">
+                {{ "Salvar alterações" if tarefa else "Criar tarefa" }}
+            </button>
+        </p>
+
+    </form>
+
+    <a href="{{ url_for('tarefas.listar') }}">
+        Voltar para tarefas
+    </a>
+
+</body>
+</html>
