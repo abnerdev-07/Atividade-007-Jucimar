@@ -153,39 +153,40 @@ def excluir_tarefa(tarefa_id):
 
     finally:
         conn.close()
+        
 
 def buscar_tarefa(tarefa_id):
-    conn = get_connection()
+        conn = get_connection()
 
-    try:
-        tarefa = conn.execute(
-            """
-            SELECT id, descricao, prazo, prioridade, status
-            FROM tarefas
-            WHERE id = ?
-            """,
-            (tarefa_id,)
-        ).fetchone()
+        try:
+            tarefa = conn.execute(
+                """
+                SELECT id, descricao, prazo, prioridade, status
+                FROM tarefas
+                WHERE id = ?
+                """,
+                (tarefa_id,)
+            ).fetchone()
 
-        if tarefa is None:
-            return None
+            if tarefa is None:
+                return None
 
-        contatos = conn.execute(
-            """
-            SELECT c.id, c.nome
-            FROM contatos c
-            JOIN tarefas_contatos tc
-                ON c.id = tc.contato_id
-            WHERE tc.tarefa_id = ?
-            ORDER BY c.nome
-            """,
-            (tarefa_id,)
-        ).fetchall()
+            contatos = conn.execute(
+                """
+                SELECT c.id, c.nome
+                FROM contatos c
+                JOIN tarefas_contatos tc
+                    ON c.id = tc.contato_id
+                WHERE tc.tarefa_id = ?
+                ORDER BY c.nome
+                """,
+                (tarefa_id,)
+            ).fetchall()
 
-        resultado = dict(tarefa)
-        resultado["contatos"] = [dict(c) for c in contatos]
+            resultado = dict(tarefa)
+            resultado["contatos"] = [dict(c) for c in contatos]
 
-        return resultado
+            return resultado
 
-    finally:
-        conn.close()
+        finally:
+            conn.close()

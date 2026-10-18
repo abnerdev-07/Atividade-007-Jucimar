@@ -25,6 +25,13 @@
           Editar tarefa
         </a>
     </p>
+    <form
+        action="{{ url_for('tarefas.remover_tarefa', tarefa_id=tarefa.id) }}"
+        method="POST"
+        onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');"
+    >
+        <button type="submit">Excluir tarefa</button>
+    </form>
     <hr />
     
     {% else %}

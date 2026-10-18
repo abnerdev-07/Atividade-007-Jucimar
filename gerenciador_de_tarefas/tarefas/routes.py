@@ -3,7 +3,8 @@ from tarefas.models import (
     criar_tarefa,
     listar_tarefas,
     buscar_tarefa,
-    atualizar_tarefa
+    atualizar_tarefa,
+    excluir_tarefa
 )
 from database import get_connection
 import config
@@ -115,3 +116,12 @@ def editar_tarefa(tarefa_id):
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
+    
+@tarefas_bp.route("/tarefas/<int:tarefa_id>/excluir", methods=["POST"])
+def remover_tarefa(tarefa_id):
+    excluida = excluir_tarefa(tarefa_id)
+
+    if not excluida:
+        abort(404)
+
+    return redirect(url_for("tarefas.listar"))
