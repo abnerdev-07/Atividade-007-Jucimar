@@ -1,5 +1,25 @@
+from datetime import date
 
 from database import get_connection
+
+
+def status_efetivo(tarefa):
+    """Devolve 'atrasada' se o prazo já passou e a tarefa não está concluída.
+    Caso contrário, devolve o status que está salvo."""
+    status = tarefa["status"]
+    prazo = tarefa["prazo"]
+
+    if status == "concluida" or not prazo:
+        return status
+
+    try:
+        vencimento = date.fromisoformat(prazo)   # prazo no formato 2026-10-17
+    except ValueError:
+        return status
+
+    if vencimento < date.today():
+        return "atrasada"
+    return status
 
 
 def criar_tarefa(
@@ -44,6 +64,7 @@ def criar_tarefa(
     finally:
         conn.close()
 
+
 def listar_tarefas():
     conn = get_connection()
 
@@ -78,6 +99,35 @@ def listar_tarefas():
 
     finally:
         conn.close()
+
+
+def buscar_tarefa(tarefa_id):
+    conn = get_connection()
+
+    try:
+        tarefa = conn.execute(
+            "SELECT id, descricao, prazo, prioridade, status FROM tarefas WHERE id = ?",
+            (tarefa_id,)
+        ).fetchone()
+
+        if tarefa is None:
+            return None
+
+        contatos = conn.execute("""
+            SELECT c.id, c.nome
+            FROM contatos c
+            JOIN tarefas_contatos tc ON c.id = tc.contato_id
+            WHERE tc.tarefa_id = ?
+            ORDER BY c.nome
+        """, (tarefa_id,)).fetchall()
+
+        dados = dict(tarefa)
+        dados["contatos"] = [dict(c) for c in contatos]
+        return dados
+
+    finally:
+        conn.close()
+
 
 def atualizar_tarefa(
     tarefa_id,
@@ -130,6 +180,7 @@ def atualizar_tarefa(
 
     finally:
         conn.close()
+
 
 def excluir_tarefa(tarefa_id):
     conn = get_connection()
