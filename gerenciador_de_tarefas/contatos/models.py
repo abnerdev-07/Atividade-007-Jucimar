@@ -83,24 +83,37 @@ def remover_contato_banco(contato_id):
     conn.close()
 
 
-def buscar_tarefas_agrupadas_por_contato():
+def buscar_tarefas_agrupadas_por_contato(status=None, contato_id=None):
+    condicoes = ["c.status = 'ativo'"]
+    parametros = []
+
+    filtro_status = ""
+    if status:
+        filtro_status = "AND t.status = ?"
+        parametros.append(status)
+
+    if contato_id:
+        condicoes.append("c.id = ?")
+        parametros.append(contato_id)
+
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(f"""
         SELECT c.id AS contato_id, c.nome AS responsavel,
                t.id AS tarefa_id, t.descricao, t.status, t.prazo, t.prioridade
         FROM contatos c
         LEFT JOIN tarefas_contatos tc ON tc.contato_id = c.id
-        LEFT JOIN tarefas t ON t.id = tc.tarefa_id
-        WHERE c.status = 'ativo'
+        LEFT JOIN tarefas t ON t.id = tc.tarefa_id {filtro_status}
+        WHERE {" AND ".join(condicoes)}
         ORDER BY c.nome ASC, t.prazo ASC
-    """)
+    """, parametros)
     linhas = cursor.fetchall()
     conn.close()
 
     agrupados = {}
     for linha in linhas:
         grupo = agrupados.setdefault(linha["contato_id"], {
+            "id": linha["contato_id"],
             "nome": linha["responsavel"],
             "tarefas": [],
         })
