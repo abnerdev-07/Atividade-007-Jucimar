@@ -64,10 +64,8 @@ def editar_contato(id):
 
 @contatos_bp.route('/apagar/<int:id>', methods=['POST'])
 def apagar_contato(id):
-    # Regra do grupo: nao bloqueia quem ainda e responsavel por tarefa nao concluida.
-    # O admin precisa reatribuir as tarefas antes (editando cada tarefa).
     if contato_possui_tarefas(id):
-        flash('Este colaborador ainda é responsável por tarefas. Reatribua as tarefas antes de bloqueá-lo.', 'danger')
+        flash('reatribua as tarefas antes', 'danger')
         return redirect(url_for('contatos.listar_contatos'))
 
     remover_contato_banco(id)
@@ -76,7 +74,6 @@ def apagar_contato(id):
 
 @contatos_bp.route('/agrupados-por-responsavel')
 def dados_agrupados():
-    # Uma tarefa com varios responsaveis aparece sob cada um deles.
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
