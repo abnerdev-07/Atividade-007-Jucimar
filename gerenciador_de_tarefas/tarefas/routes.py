@@ -31,12 +31,10 @@ def listar():
 @tarefas_bp.route("/tarefas/nova", methods=["GET", "POST"])
 def nova_tarefa():
     conn = get_connection()
-
     try:
         contatos = conn.execute(
             "SELECT id, nome FROM contatos ORDER BY nome"
         ).fetchall()
-
         contatos = [dict(contato) for contato in contatos]
     finally:
         conn.close()
@@ -93,12 +91,10 @@ def editar_tarefa(tarefa_id):
         abort(404)
 
     conn = get_connection()
-
     try:
         contatos = conn.execute(
             "SELECT id, nome FROM contatos ORDER BY nome"
         ).fetchall()
-
         contatos = [dict(contato) for contato in contatos]
     finally:
         conn.close()

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; align-items: start; }
+  .coluna h3 { font-size: 1.2rem; font-weight: 400; margin-bottom: .8rem; }
+  .coluna .contador { background: #fff; border-radius: 6px; padding: 0 .45rem; font-size: .8rem; color: #999; }
+  .card-tarefa { background: #b9deff; border-radius: 4px; padding: .8rem; margin-bottom: .9rem; box-shadow: 2px 3px 4px rgba(0,0,0,.3); min-height: 90px; }
+  .card-tarefa.status-atrasado { background: #ffd592; }
+  .card-tarefa.status-feito { background: #d4ffc4; }
+  .card-tarefa h4 { font-size: 1rem; font-weight: 600; margin: 0 0 .3rem 0; }
+  .card-tarefa .prazo { font-size: .85rem; color: #557; }
+  .card-rodape { display: flex; justify-content: space-between; align-items: center; margin: .8rem 0 .4rem 0; }
+  .avatares { display: flex; align-items: center; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; background: #2e343a; color: #fff; font-size: .75rem; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; margin-right: -8px; }
+  .prioridade { font-size: .7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
+  .prioridade.alta { background: #ffb3b3; color: #b33; border-color: #e66; }
+  .prioridade.media { background: #a8d4ff; color: #2a6db0; border-color: #5aa5ee; }
+  .editar { font-size: .8rem; }
+  .vazio { color: #888; font-size: .8rem; }
+</style>
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-normal">Quadro de Tarefas</h2>
+    <a href="{{ url_for('tarefas.nova_tarefa') }}" class="btn btn-primary">+ Nova tarefa</a>
+  </div>
+
+  {% set colunas = [('fazer', 'Para fazer'), ('fazendo', 'Fazendo'), ('feito', 'Feito'), ('atrasado', 'Atrasado')] %}
+
+  <div class="kanban">
+    {% for chave, titulo in colunas %}
+      {% set itens = tarefas | selectattr('status', 'equalto', chave) | list %}
+      <div class="coluna">
+        <h3>{{ titulo }} <span class="contador">{{ itens | length }}</span></h3>
+
+        {% for tarefa in itens %}
+        <div class="card-tarefa status-{{ tarefa.status }}">
+          <h4>{{ tarefa.descricao }}</h4>
+          <div class="prazo">
+            {% if tarefa.prazo %}{{ tarefa.prazo[8:10] }}/{{ tarefa.prazo[5:7] }}{% else %}Sem prazo{% endif %}
+          </div>
+
+          <div class="card-rodape">
+            <div class="avatares">
+              {% for c in tarefa.contatos %}
+                <span class="avatar" title="{{ c.nome }}">{{ c.nome[0] | upper }}</span>
+              {% else %}
+                <span class="vazio">Sem responsável</span>
+              {% endfor %}
+            </div>
+            <span class="prioridade {{ tarefa.prioridade }}">{{ tarefa.prioridade }}</span>
+          </div>
+
+          <a class="editar" href="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa.id) }}">Editar tarefa</a>
+        </div>
+        {% else %}
+          <p class="vazio">Sem tarefas</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if not tarefas %}
+    <p class="text-muted mt-4">Nenhuma tarefa cadastrada.</p>
+  {% endif %}
+</div>
+{% endblock %}
