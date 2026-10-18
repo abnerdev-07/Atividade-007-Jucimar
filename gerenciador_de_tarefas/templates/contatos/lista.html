@@ -29,6 +29,9 @@
                         <td class="text-secondary">{{ contato.email }}</td>
                         <td class="text-secondary">{{ contato.telefone or 'Não informado' }}</td>
                         <td class="text-center pe-4">
+                            <a href="{{ url_for('contatos.editar_contato', id=contato.id) }}" class="btn btn-sm btn-primary px-3 py-1.5" style="border: none;">
+                                Editar
+                            </a>
                             <form action="{{ url_for('contatos.apagar_contato', id=contato.id) }}" method="POST" style="display:inline;">
                                 <button type="submit" class="btn btn-sm btn-danger px-3 py-1.5" onclick="return confirm('Tem certeza que deseja bloquear este colaborador? As tarefas dele serão liberadas para reatribuição.');" style="background-color: #dc3545; border: none;">
                                     Bloquear
