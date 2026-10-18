@@ -11,15 +11,15 @@ CONTATOS = [
 
 hoje = date.today()
 
-# (descricao, prazo, prioridade, status, indice do contato na lista acima)
+# (descricao, prazo, prioridade, status, indices dos contatos responsaveis)
 TAREFAS = [
-    ("Criar tela de login", hoje + timedelta(days=5), "alta", "a fazer", 0),
-    ("Escrever o README", hoje + timedelta(days=7), "média", "fazendo", 1),
-    ("Configurar o banco de dados", hoje - timedelta(days=2), "alta", "concluída", 2),
-    ("Revisar os pull requests", hoje - timedelta(days=3), "média", "atrasada", 3),
-    ("Montar o cronograma", hoje + timedelta(days=10), "baixa", "a fazer", 0),
-    ("Testar o formulário de tarefas", hoje + timedelta(days=2), "alta", "fazendo", 2),
-    ("Corrigir bugs da lista", hoje - timedelta(days=1), "baixa", "atrasada", 1),
+    ("Criar tela de login", hoje + timedelta(days=5), "alta", "fazer", [0]),
+    ("Escrever o README", hoje + timedelta(days=7), "media", "fazendo", [1]),
+    ("Configurar o banco de dados", hoje - timedelta(days=2), "alta", "concluida", [2]),
+    ("Revisar os pull requests", hoje - timedelta(days=3), "media", "atrasada", [3]),
+    ("Montar o cronograma", hoje + timedelta(days=10), "baixa", "fazer", [0, 1]),
+    ("Testar o formulário de tarefas", hoje + timedelta(days=2), "alta", "fazendo", [2]),
+    ("Corrigir bugs da lista", hoje - timedelta(days=1), "baixa", "atrasada", [1, 3]),
 ]
 
 
@@ -28,6 +28,7 @@ def popular():
     conn = get_connection()
 
     # Limpa antes, para rodar o script várias vezes sem duplicar dados
+    conn.execute("DELETE FROM tarefas_contatos")
     conn.execute("DELETE FROM tarefas")
     conn.execute("DELETE FROM contatos")
 
@@ -39,12 +40,18 @@ def popular():
         )
         ids.append(cursor.lastrowid)
 
-    for descricao, prazo, prioridade, status, indice in TAREFAS:
-        conn.execute(
-            "INSERT INTO tarefas (descricao, prazo, prioridade, status, contato_id) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (descricao, prazo.isoformat(), prioridade, status, ids[indice]),
+    for descricao, prazo, prioridade, status, indices in TAREFAS:
+        cursor = conn.execute(
+            "INSERT INTO tarefas (descricao, prazo, prioridade, status) "
+            "VALUES (?, ?, ?, ?)",
+            (descricao, prazo.isoformat(), prioridade, status),
         )
+        tarefa_id = cursor.lastrowid
+        for indice in indices:
+            conn.execute(
+                "INSERT INTO tarefas_contatos (tarefa_id, contato_id) VALUES (?, ?)",
+                (tarefa_id, ids[indice]),
+            )
 
     conn.commit()
     conn.close()
