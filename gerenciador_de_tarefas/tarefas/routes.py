@@ -12,9 +12,12 @@ from tarefas.models import (
     criar_tarefa,
     listar_tarefas,
     buscar_tarefa,
-    atualizar_tarefa
+    atualizar_tarefa,
+    excluir_tarefa,
+    status_efetivo
 )
 
+from contatos.models import buscar_todos_contatos
 from database import get_connection
 import config
 
@@ -25,7 +28,26 @@ tarefas_bp = Blueprint("tarefas", __name__)
 @tarefas_bp.route("/tarefas", methods=["GET"])
 def listar():
     tarefas = listar_tarefas()
-    return render_template("tarefas/lista.html", tarefas=tarefas)
+
+    # Filtro por contato: /tarefas?contato=3 mostra so as tarefas do contato 3
+    contato_id = request.args.get("contato", type=int)
+    if contato_id:
+        tarefas = [
+            t for t in tarefas
+            if any(c["id"] == contato_id for c in t["contatos"])
+        ]
+
+    for t in tarefas:
+        t["status_final"] = status_efetivo(t)
+        if t["status_final"] == "atrasado":  # o config.py salva "atrasado"
+            t["status_final"] = "atrasada"
+
+    return render_template(
+        "tarefas/lista.html",
+        tarefas=tarefas,
+        contatos=buscar_todos_contatos(),
+        contato_filtrado=contato_id
+    )
 
 
 @tarefas_bp.route("/tarefas/nova", methods=["GET", "POST"])
@@ -151,3 +173,13 @@ def editar_tarefa(tarefa_id):
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
+
+
+@tarefas_bp.route("/tarefas/<int:tarefa_id>/excluir", methods=["POST"])
+def remover_tarefa(tarefa_id):
+    excluida = excluir_tarefa(tarefa_id)
+
+    if not excluida:
+        abort(404)
+
+    return redirect(url_for("tarefas.listar"))
