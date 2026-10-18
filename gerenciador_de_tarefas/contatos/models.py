@@ -1,31 +1,59 @@
-CONTATOS = [
-    {"id": 1, "nome": "Matheus", "email": "matheus@email.com", "telefone": "92 99999-0001"},
-    {"id": 2, "nome": "Abner", "email": "abner@email.com", "telefone": "92 99999-0002"},
-    {"id": 3, "nome": "Aline", "email": "aline@email.com", "telefone": "92 99999-0003"},
-    {"id": 4, "nome": "Anthony", "email": "anthony@email.com", "telefone": "92 99999-0004"},
-]
+# contatos/models.py
+from database import get_connection
 
+def buscar_todos_contatos():
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM contatos WHERE status = 'ativo' ORDER BY nome ASC")
+    contatos = cursor.fetchall()
+    conn.close()
+    return contatos
 
-def listar_contatos():
-    return CONTATOS
+def buscar_contato_por_id(contato_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM contatos WHERE id = ?", (contato_id,))
+    contato = cursor.fetchone()
+    conn.close()
+    return contato
 
+def inserir_contato_banco(nome, email, telefone):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO contatos (nome, email, telefone) VALUES (?, ?, ?)",
+        (nome, email, telefone)
+    )
+    conn.commit()
+    conn.close()
 
-def buscar_contato(contato_id):
-    for contato in CONTATOS:
-        if contato["id"] == contato_id:
-            return contato
-    return None
+def email_ja_cadastrado(email):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM contatos WHERE email = ?", (email,))
+    resultado = cursor.fetchone()
+    conn.close()
+    return resultado is not None
 
+def contato_possui_tarefas(contato_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT COUNT(*) AS total FROM tarefas_contatos WHERE contato_id = ?",
+        (contato_id,)
+    )
+    resultado = cursor.fetchone()
+    conn.close()
+    return resultado["total"] > 0
 
-def criar_contato(nome, email=None, telefone=None):
-    return {"id": 5, "nome": nome, "email": email, "telefone": telefone}
-
-
-def atualizar_contato(contato_id, nome, email=None, telefone=None):
-    if buscar_contato(contato_id) is None:
-        return None
-    return {"id": contato_id, "nome": nome, "email": email, "telefone": telefone}
-
-
-def excluir_contato(contato_id):
-    return buscar_contato(contato_id) is not None
+def remover_contato_banco(contato_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("UPDATE tarefas SET contato_id = NULL WHERE contato_id = ?", (contato_id,))
+    
+    cursor.execute("UPDATE contatos SET status = 'bloqueado' WHERE id = ?", (contato_id,))
+    
+    conn.commit()
+    conn.close()
