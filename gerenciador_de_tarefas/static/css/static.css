@@ -26,6 +26,7 @@ body {
 
 .navbar-custom .navbar-brand {
     color: #ffffff !important;
+
     text-decoration: none;
     font-size: 1.25rem;
     font-weight: 600;
@@ -191,4 +192,34 @@ body {
 .btn-danger {
     color: #fff;
     background-color: #dc3545;
+}
+
+
+/* ===== Cores de status das tarefas ===== */
+.status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-fazer {            /* a fazer: cinza-azulado */
+    background: #e3e8ef;
+    color: #3b4a63;
+}
+
+.status-fazendo {          /* fazendo: amarelo */
+    background: #fff3bf;
+    color: #7a5b00;
+}
+
+.status-concluida {        /* concluída: verde */
+    background: #d3f9d8;
+    color: #1b6b2f;
+}
+
+.status-atrasada {         /* atrasada: vermelho */
+    background: #ffe0e0;
+    color: #a61e1e;
 }
