@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, abort
+
+from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
+
 from tarefas.models import (
     criar_tarefa,
     listar_tarefas,
@@ -14,20 +16,17 @@ tarefas_bp = Blueprint("tarefas", __name__)
 @tarefas_bp.route("/tarefas", methods=["GET"])
 def listar():
     tarefas = listar_tarefas()
+    return render_template("tarefas/lista.html", tarefas=tarefas)
 
-    return render_template(
-        "tarefas/lista.html",
-        tarefas=tarefas
-    )
 
 @tarefas_bp.route("/tarefas/nova", methods=["GET", "POST"])
 def nova_tarefa():
     conn = get_connection()
-
     try:
         contatos = conn.execute(
             "SELECT id, nome FROM contatos ORDER BY nome"
         ).fetchall()
+        contatos = [dict(contato) for contato in contatos]
     finally:
         conn.close()
 
@@ -38,14 +37,20 @@ def nova_tarefa():
         status = request.form.get("status", "fazer")
         contatos_ids = request.form.getlist("contatos_ids", type=int)
 
-        if not descricao:
-            return "A descrição é obrigatória.", 400
+        if not descricao or not contatos_ids:
+            flash(
+                "A descrição e pelo menos um responsável são obrigatórios.",
+                "danger"
+            )
+            return redirect(url_for("tarefas.nova_tarefa"))
 
         if prioridade not in config.PRIORIDADES:
-            return "Prioridade inválida.", 400
+            flash("Prioridade inválida.", "danger")
+            return redirect(url_for("tarefas.nova_tarefa"))
 
         if status not in config.STATUS_OPCOES:
-            return "Status inválido.", 400
+            flash("Status inválido.", "danger")
+            return redirect(url_for("tarefas.nova_tarefa"))
 
         criar_tarefa(
             descricao=descricao,
@@ -55,10 +60,11 @@ def nova_tarefa():
             contatos_ids=contatos_ids
         )
 
+        flash("Tarefa criada com sucesso!", "success")
         return redirect(url_for("tarefas.listar"))
 
     return render_template(
-        "tarefas/formulario.html",
+        "tarefas/adicionar_tarefa.html",
         tarefa=None,
         contatos=contatos,
         prioridades=config.PRIORIDADES,
@@ -78,8 +84,13 @@ def editar_tarefa(tarefa_id):
         contatos = conn.execute(
             "SELECT id, nome FROM contatos ORDER BY nome"
         ).fetchall()
+        contatos = [dict(contato) for contato in contatos]
     finally:
         conn.close()
+
+    tarefa_contat_ids = [
+        contato["id"] for contato in tarefa["contatos"]
+    ]
 
     if request.method == "POST":
         descricao = request.form.get("descricao", "").strip()
@@ -88,14 +99,26 @@ def editar_tarefa(tarefa_id):
         status = request.form.get("status", "fazer")
         contatos_ids = request.form.getlist("contatos_ids", type=int)
 
-        if not descricao:
-            return "A descrição é obrigatória.", 400
+        if not descricao or not contatos_ids:
+            flash(
+                "A descrição e pelo menos um responsável são obrigatórios.",
+                "danger"
+            )
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         if prioridade not in config.PRIORIDADES:
-            return "Prioridade inválida.", 400
+            flash("Prioridade inválida.", "danger")
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         if status not in config.STATUS_OPCOES:
-            return "Status inválido.", 400
+            flash("Status inválido.", "danger")
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         atualizar_tarefa(
             tarefa_id=tarefa_id,
@@ -106,12 +129,14 @@ def editar_tarefa(tarefa_id):
             contatos_ids=contatos_ids
         )
 
+        flash("Tarefa atualizada com sucesso!", "success")
         return redirect(url_for("tarefas.listar"))
 
     return render_template(
-        "tarefas/formulario.html",
+        "tarefas/editar_tarefa.html",
         tarefa=tarefa,
         contatos=contatos,
+        tarefa_contat_ids=tarefa_contat_ids,
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
