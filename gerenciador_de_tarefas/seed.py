@@ -15,11 +15,11 @@ hoje = date.today()
 TAREFAS = [
     ("Criar tela de login", hoje + timedelta(days=5), "alta", "fazer", [0]),
     ("Escrever o README", hoje + timedelta(days=7), "media", "fazendo", [1]),
-    ("Configurar o banco de dados", hoje - timedelta(days=2), "alta", "concluida", [2]),
-    ("Revisar os pull requests", hoje - timedelta(days=3), "media", "atrasada", [3]),
-    ("Montar o cronograma", hoje + timedelta(days=10), "baixa", "fazer", [0, 1]),
+    ("Configurar o banco de dados", hoje - timedelta(days=2), "alta", "feito", [2]),
+    ("Revisar os pull requests", hoje - timedelta(days=3), "media", "atrasado", [3]),
+    ("Montar o cronograma", hoje + timedelta(days=10), "media", "fazer", [0, 1]),
     ("Testar o formulário de tarefas", hoje + timedelta(days=2), "alta", "fazendo", [2]),
-    ("Corrigir bugs da lista", hoje - timedelta(days=1), "baixa", "atrasada", [1, 3]),
+    ("Corrigir bugs da lista", hoje - timedelta(days=1), "media", "atrasado", [1, 3]),
 ]
 
 
@@ -27,7 +27,6 @@ def popular():
     init_db()
     conn = get_connection()
 
-    # Limpa antes, para rodar o script várias vezes sem duplicar dados
     conn.execute("DELETE FROM tarefas_contatos")
     conn.execute("DELETE FROM tarefas")
     conn.execute("DELETE FROM contatos")
