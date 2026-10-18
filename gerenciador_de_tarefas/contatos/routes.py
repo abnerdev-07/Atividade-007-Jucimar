@@ -1,3 +1,4 @@
+import config
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from contatos.models import (
     buscar_todos_contatos, inserir_contato_banco, email_ja_cadastrado,
@@ -68,8 +69,21 @@ def apagar_contato(id):
 
 @contatos_bp.route('/agrupados-por-responsavel')
 def dados_agrupados():
-    grupos = buscar_tarefas_agrupadas_por_contato()
-    return render_template('tarefas/quadro_admin.html', grupos=grupos)
+    status = request.args.get('status') or None
+    contato_id = request.args.get('contato', type=int)
+
+    if status and status not in config.STATUS_OPCOES:
+        status = None
+
+    grupos = buscar_tarefas_agrupadas_por_contato(status=status, contato_id=contato_id)
+    return render_template(
+        'tarefas/quadro_admin.html',
+        grupos=grupos,
+        contatos=buscar_todos_contatos(),
+        status_opcoes=config.STATUS_OPCOES,
+        status_atual=status,
+        contato_atual=contato_id,
+    )
 
 @contatos_bp.route('/filtrar-por-contato/<int:contato_id>')
 def filtrar_por_contato(contato_id):

@@ -2,6 +2,11 @@
 
 {% block content %}
 <style>
+  .filtros { background: #fff; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.15); padding: 1rem; margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: end; flex-wrap: wrap; }
+  .filtros label { display: block; font-size: .85rem; color: #444; margin-bottom: .3rem; }
+  .filtros select { padding: .5rem .7rem; border: 1px solid #ccc; border-radius: 4px; min-width: 180px; }
+  .filtros button { background: #007bff; color: #fff; border: none; border-radius: 4px; padding: .55rem 1.2rem; cursor: pointer; }
+  .filtros a { color: #6c757d; text-decoration: none; padding: .55rem .5rem; }
   .grupo { background: #fff; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,.15); margin-bottom: 1.5rem; overflow: hidden; }
   .grupo-titulo { background: #2e343a; color: #fff; padding: .8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
   .grupo-titulo .contador { background: #fff; color: #555; border-radius: 6px; padding: 0 .5rem; font-size: .8rem; }
@@ -21,6 +26,31 @@
 
 <div class="container mt-4">
   <h2 class="fw-normal mb-4">Tarefas por responsável</h2>
+
+  <form method="GET" class="filtros">
+    <div>
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="">Todos</option>
+        {% for s in status_opcoes %}
+          <option value="{{ s }}" {% if s == status_atual %}selected{% endif %}>{{ s | capitalize }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label for="contato">Contato</label>
+      <select id="contato" name="contato">
+        <option value="">Todos</option>
+        {% for c in contatos %}
+          <option value="{{ c.id }}" {% if c.id == contato_atual %}selected{% endif %}>{{ c.nome }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <button type="submit">Filtrar</button>
+      <a href="{{ url_for('contatos.dados_agrupados') }}">Limpar</a>
+    </div>
+  </form>
 
   {% for grupo in grupos %}
   <div class="grupo">
@@ -46,7 +76,7 @@
     </div>
   </div>
   {% else %}
-  <p class="vazio">Nenhum colaborador ativo cadastrado.</p>
+  <p class="vazio">Nenhum colaborador encontrado.</p>
   {% endfor %}
 </div>
 {% endblock %}
