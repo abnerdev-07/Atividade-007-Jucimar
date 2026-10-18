@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center" style="display: flex; justify-content: center; margin-top: 3rem;">
+    <div style="width: 100%; max-width: 650px;">
+        <div class="card" style="background-color: #ffffff; border-radius: 4px; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); border: none; overflow: hidden;">
+
+            <div style="background-color: #ffc107; color: #212529; text-align: center; padding: 1.5rem 1rem;">
+                <h3 style="margin: 0; font-size: 1.45rem;">Modificar Detalhes da Tarefa</h3>
+            </div>
+
+            <div style="padding: 2.5rem;">
+
+                {% with mensagens = get_flashed_messages(with_categories=true) %}
+                    {% for categoria, mensagem in mensagens %}
+                        <div class="alert alert-{{ categoria }}" role="alert">
+                            {{ mensagem }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+
+                <form action="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa['id']) }}" method="POST">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label for="descricao">Descrição da Demanda *</label>
+                        <textarea id="descricao" name="descricao" required rows="3" style="display: block; width: 100%; padding: 0.75rem; box-sizing: border-box;">{{ tarefa['descricao'] }}</textarea>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label>Alterar Responsáveis (Time) *</label>
+                        <div style="border: 1px solid #cccccc; border-radius: 4px; padding: 1rem; max-height: 150px; overflow-y: auto; background-color: #f9f9f9;">
+                            {% for contato in contatos %}
+                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem; gap: 0.5rem;">
+                                    <input
+                                        type="checkbox"
+                                        id="contato_{{ contato['id'] }}"
+                                        name="contatos_ids"
+                                        value="{{ contato['id'] }}"
+                                        {% if contato['id'] in tarefa_contat_ids %}checked{% endif %}
+                                    >
+                                    <label for="contato_{{ contato['id'] }}">{{ contato['nome'] }}</label>
+                                </div>
+                            {% else %}
+                                <p>Nenhum colaborador cadastrado.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="flex: 1;">
+                            <label for="prazo">Prazo de Entrega</label>
+                            <input type="date" id="prazo" name="prazo" value="{{ tarefa['prazo'] or '' }}" style="display: block; width: 100%; padding: 0.75rem; box-sizing: border-box;">
+                        </div>
+
+                        <div style="flex: 1;">
+                            <label for="prioridade">Prioridade</label>
+                            <select id="prioridade" name="prioridade" style="display: block; width: 100%; padding: 0.75rem; box-sizing: border-box;">
+                                {% for p in prioridades %}
+                                    <option value="{{ p }}" {% if p == tarefa['prioridade'] %}selected{% endif %}>
+                                        {{ p | capitalize }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2.2rem;">
+                        <label for="status">Status Atual</label>
+                        <select id="status" name="status" style="display: block; width: 100%; padding: 0.75rem; box-sizing: border-box;">
+                            {% for s in status_opcoes %}
+                                <option value="{{ s }}" {% if s == tarefa['status'] %}selected{% endif %}>
+                                    {{ s | capitalize }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="{{ url_for('tarefas.listar') }}">Voltar</a>
+                        <button type="submit">Salvar Alterações</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

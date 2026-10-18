@@ -1,5 +1,12 @@
-
-from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    abort,
+    flash
+)
 
 from tarefas.models import (
     criar_tarefa,
@@ -8,8 +15,10 @@ from tarefas.models import (
     atualizar_tarefa,
     excluir_tarefa
 )
+
 from database import get_connection
 import config
+
 
 tarefas_bp = Blueprint("tarefas", __name__)
 
@@ -66,14 +75,16 @@ def nova_tarefa():
 
     return render_template(
         "tarefas/adicionar_tarefa.html",
-        tarefa=None,
         contatos=contatos,
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
 
 
-@tarefas_bp.route("/tarefas/<int:tarefa_id>/editar", methods=["GET", "POST"])
+@tarefas_bp.route(
+    "/tarefas/<int:tarefa_id>/editar",
+    methods=["GET", "POST"]
+)
 def editar_tarefa(tarefa_id):
     tarefa = buscar_tarefa(tarefa_id)
 
