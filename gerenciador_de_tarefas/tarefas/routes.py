@@ -18,6 +18,7 @@ from tarefas.models import (
 )
 
 from contatos.models import buscar_todos_contatos
+from database import get_connection
 import config
 
 
@@ -38,6 +39,8 @@ def listar():
 
     for t in tarefas:
         t["status_final"] = status_efetivo(t)
+        if t["status_final"] == "atrasado":  # o config.py salva "atrasado"
+            t["status_final"] = "atrasada"
 
     return render_template(
         "tarefas/lista.html",
@@ -49,7 +52,14 @@ def listar():
 
 @tarefas_bp.route("/tarefas/nova", methods=["GET", "POST"])
 def nova_tarefa():
-    contatos = [dict(c) for c in buscar_todos_contatos()]
+    conn = get_connection()
+    try:
+        contatos = conn.execute(
+            "SELECT id, nome FROM contatos ORDER BY nome"
+        ).fetchall()
+        contatos = [dict(contato) for contato in contatos]
+    finally:
+        conn.close()
 
     if request.method == "POST":
         descricao = request.form.get("descricao", "").strip()
@@ -59,7 +69,10 @@ def nova_tarefa():
         contatos_ids = request.form.getlist("contatos_ids", type=int)
 
         if not descricao or not contatos_ids:
-            flash("A descrição e pelo menos um responsável são obrigatórios.", "danger")
+            flash(
+                "A descrição e pelo menos um responsável são obrigatórios.",
+                "danger"
+            )
             return redirect(url_for("tarefas.nova_tarefa"))
 
         if prioridade not in config.PRIORIDADES:
@@ -83,21 +96,34 @@ def nova_tarefa():
 
     return render_template(
         "contatos/formulario.html",
-        tarefa=None,
         contatos=contatos,
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
 
 
-@tarefas_bp.route("/tarefas/<int:tarefa_id>/editar", methods=["GET", "POST"])
+@tarefas_bp.route(
+    "/tarefas/<int:tarefa_id>/editar",
+    methods=["GET", "POST"]
+)
 def editar_tarefa(tarefa_id):
     tarefa = buscar_tarefa(tarefa_id)
 
     if tarefa is None:
         abort(404)
 
-    contatos = [dict(c) for c in buscar_todos_contatos()]
+    conn = get_connection()
+    try:
+        contatos = conn.execute(
+            "SELECT id, nome FROM contatos ORDER BY nome"
+        ).fetchall()
+        contatos = [dict(contato) for contato in contatos]
+    finally:
+        conn.close()
+
+    tarefa_contat_ids = [
+        contato["id"] for contato in tarefa["contatos"]
+    ]
 
     if request.method == "POST":
         descricao = request.form.get("descricao", "").strip()
@@ -107,16 +133,25 @@ def editar_tarefa(tarefa_id):
         contatos_ids = request.form.getlist("contatos_ids", type=int)
 
         if not descricao or not contatos_ids:
-            flash("A descrição e pelo menos um responsável são obrigatórios.", "danger")
-            return redirect(url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id))
+            flash(
+                "A descrição e pelo menos um responsável são obrigatórios.",
+                "danger"
+            )
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         if prioridade not in config.PRIORIDADES:
             flash("Prioridade inválida.", "danger")
-            return redirect(url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id))
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         if status not in config.STATUS_OPCOES:
             flash("Status inválido.", "danger")
-            return redirect(url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id))
+            return redirect(
+                url_for("tarefas.editar_tarefa", tarefa_id=tarefa_id)
+            )
 
         atualizar_tarefa(
             tarefa_id=tarefa_id,
@@ -131,9 +166,10 @@ def editar_tarefa(tarefa_id):
         return redirect(url_for("tarefas.listar"))
 
     return render_template(
-        "tarefas/formulario.html",
+        "tarefas/editar_tarefa.html",
         tarefa=tarefa,
         contatos=contatos,
+        tarefa_contat_ids=tarefa_contat_ids,
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
     )
