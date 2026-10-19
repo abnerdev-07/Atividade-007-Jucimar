@@ -95,7 +95,7 @@ def nova_tarefa():
         return redirect(url_for("tarefas.listar"))
 
     return render_template(
-        "tarefas/adicionar_tarefa.html",
+        "contatos/formulario.html",
         contatos=contatos,
         prioridades=config.PRIORIDADES,
         status_opcoes=config.STATUS_OPCOES
