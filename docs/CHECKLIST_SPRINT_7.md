@@ -84,3 +84,14 @@
 - [x] Registrar os PRs integrados e confirmar se restam pendências.
 
 **Responsável:**  Anthony Figarella
+
+## Resumo de conclusão da Sprint 7
+
+- [x] #43 — Teste cruzado entre os módulos concluído.
+- [x] #44 — Bugs encontrados corrigidos e validados.
+- [x] #45 — README escrito e revisado.
+- [x] #46 — Cronograma final salvo em `docs/`.
+- [x] #47 — Pendências revisadas e merges aprovados concluídos.
+- [x] Equipe revisou a entrega final.
+
+**Data de conclusão:**  19/10/2026
