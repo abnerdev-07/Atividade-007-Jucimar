@@ -1,6 +1,6 @@
 # Checklist — Sprint 8 · Entrega
 
-## Issue #48 — Congelar a main às 16h
+## Issue #48 — Congelar a main
 
 - [x] Conferir se os PRs aprovados foram integrados
 - [x] Confirmar com a equipe o congelamento da main
@@ -25,7 +25,7 @@
 - [x] Executar a aplicação
 - [x] Testar contatos, tarefas e Kanban
 
-## Issue #52 — Entregar o trabalho até as 18h
+## Issue #52 — Entregar o trabalho
 
 - [x] Confirmar a versão final e documentação
 - [x] Conferir o link do repositório e os requisitos de entrega

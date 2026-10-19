@@ -67,6 +67,8 @@
 - [x] Adicionar no README um link para o cronograma, se fizer sentido.
 - [x] Registrar o commit ou PR que contém o cronograma.
 
+📊 **Cronograma final:** [Baixar planilha Excel](./grafico_gantt.xlsx)
+
 **Responsável:**  Anthony Figarella
 
 ## Issue #47 — Fazer o merge das pendências
@@ -95,3 +97,6 @@
 - [x] Equipe revisou a entrega final.
 
 **Data de conclusão:**  19/10/2026
+
+
+[def]: grafico_gantt.xlsx
