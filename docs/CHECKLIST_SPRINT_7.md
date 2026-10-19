@@ -1,0 +1,25 @@
+# Sprint 7 — Integração e documentação
+
+**Marco:** S7 · Integração e docs  
+**Objetivo:** realizar testes cruzados entre os módulos, corrigir bugs, finalizar a documentação e integrar as pendências aprovadas.
+
+## Issue #43 — Teste cruzado entre os módulos
+
+- [x] Iniciar a aplicação e confirmar que a página inicial carrega sem erros.
+- [x] Cadastrar um novo contato e confirmar que aparece na listagem.
+- [x] Editar o contato e confirmar que os dados persistem após atualizar a página.
+- [x] Criar uma tarefa vinculada ao contato.
+- [x] Confirmar que a tarefa e seu responsável aparecem corretamente no Kanban.
+- [x] Filtrar as tarefas pelo contato e conferir o resultado.
+- [x] Mover a tarefa entre **Para fazer**, **Fazendo** e **Concluída**.
+- [x] Atualizar a página e confirmar que o status foi preservado no SQLite.
+- [x] Editar a tarefa e conferir se descrição, prazo, prioridade e responsáveis persistem.
+- [x] Excluir uma tarefa de teste e confirmar que ela desaparece da listagem.
+- [x] Verificar se os demais módulos continuam funcionando após os testes.
+- [x] Registrar o resultado dos testes e os bugs encontrados.
+
+**Resultado / evidências:**
+
+- Data do teste: 19/10/2026
+- Responsável: Anthony Figarella
+
