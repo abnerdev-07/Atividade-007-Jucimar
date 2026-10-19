@@ -38,3 +38,20 @@
 
 - Data do teste: 19/10/2026
 - Responsável: Anthony Figarella
+## Issue #45 — Escrever o README
+
+- [x] Descrever o objetivo do Gerenciador de Tarefas.
+- [x] Listar as tecnologias efetivamente utilizadas no projeto.
+- [x] Documentar os pré-requisitos para executar localmente.
+- [x] Explicar como clonar o repositório e criar/ativar o ambiente virtual.
+- [x] Documentar a instalação das dependências conforme os arquivos do repositório.
+- [x] Explicar a configuração e inicialização do banco SQLite, conforme o projeto.
+- [x] Informar o comando correto para iniciar a aplicação Flask.
+- [x] Descrever os módulos de contatos e tarefas.
+- [x] Explicar o funcionamento do Kanban e da persistência de status.
+- [x] Incluir instruções de uso e, se útil, capturas de tela.
+- [x] Conferir links, comandos e ortografia do README.
+- [x] Validar as instruções do README em um ambiente de teste.
+
+**Arquivo:** `README.md`  
+**Responsável:**  Anthony Figarella 
