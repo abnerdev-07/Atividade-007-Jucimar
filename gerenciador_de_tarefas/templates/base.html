@@ -27,9 +27,10 @@
         <div class="container d-flex justify-content-between">
             <a class="navbar-brand fw-semibold" href="#">Sistema Corporativo</a>
             <div class="navbar-nav">
-                <a class="nav-link px-3" href="#">Home</a>
+                <!-- <a class="nav-link px-3" href="#">Home</a> -->
+                <a class="nav-link px-3" href="{{ url_for('index') }}">Home</a>
                 <a class="nav-link px-3 fw-bold" href="{{ url_for('contatos.listar_contatos') }}">Contatos</a>
-                <a class="nav-link px-3" href="#">Sair</a>
+                <!-- <a class="nav-link px-3" href="#">Sair</a> -->
             </div>
         </div>
     </nav>
