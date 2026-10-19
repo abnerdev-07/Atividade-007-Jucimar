@@ -19,7 +19,7 @@
                     {% endfor %}
                 {% endwith %}
 
-                <form action="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa['id']) }}" method="POST">
+                   <form action="{{ url_for('tarefas.nova_tarefa') }}" method="POST">
 
                     <div style="margin-bottom: 1.5rem;">
                         <label for="descricao">Descrição da Demanda *</label>
