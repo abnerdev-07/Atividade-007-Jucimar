@@ -2,27 +2,184 @@
 
 {% block content %}
 <style>
-  .kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; align-items: start; }
-  .coluna h3 { font-size: 1.2rem; font-weight: 400; margin-bottom: .8rem; }
-  .coluna .contador { background: #fff; border-radius: 6px; padding: 0 .45rem; font-size: .8rem; color: #999; }
-  .card-tarefa { background: #b9deff; border-radius: 4px; padding: .8rem; margin-bottom: .9rem; box-shadow: 2px 3px 4px rgba(0,0,0,.3); min-height: 90px; }
-  .card-tarefa.status-fazendo { background: #fff3b0; }
-  .card-tarefa.status-concluida { background: #d4ffc4; }
-  .card-tarefa.vencida { border-left: 5px solid #d62828; }
-  .selo-atrasada { display: inline-block; background: #ffe0e0; color: #c0152a; border: 1px solid #e66; border-radius: 4px; padding: 0 .4rem; font-size: .75rem; font-weight: 700; margin-top: .3rem; }
-  .card-tarefa h4 { font-size: 1rem; font-weight: 600; margin: 0 0 .3rem 0; }
-  .card-tarefa .prazo { font-size: .85rem; color: #557; }
-  .card-rodape { display: flex; justify-content: space-between; align-items: center; margin: .8rem 0 .4rem 0; }
-  .avatares { display: flex; align-items: center; }
-  .avatar { width: 28px; height: 28px; border-radius: 50%; background: #2e343a; color: #fff; font-size: .75rem; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; margin-right: -8px; }
-  .prioridade { font-size: .7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
-  .prioridade.alta { background: #ffb3b3; color: #b33; border-color: #e66; }
-  .prioridade.media { background: #a8d4ff; color: #2a6db0; border-color: #5aa5ee; }
-  .prioridade.baixa { background: #d9d9d9; color: #555; border-color: #aaa; }
-  .acoes { display: flex; gap: .8rem; align-items: center; }
-  .editar { font-size: .8rem; }
-  .excluir { font-size: .8rem; color: #b33; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
-  .vazio { color: #888; font-size: .8rem; }
+  .kanban {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    align-items: start;
+  }
+
+  .coluna h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: .8rem;
+  }
+
+  .coluna .contador {
+    background: #fff;
+    border-radius: 6px;
+    padding: 0 .45rem;
+    font-size: .8rem;
+    color: #999;
+  }
+
+  .card-tarefa {
+    background: #b9deff;
+    border-radius: 4px;
+    padding: .8rem;
+    margin-bottom: .9rem;
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, .3);
+    min-height: 90px;
+  }
+
+  .card-tarefa.status-fazendo {
+    background: #fff3b0;
+  }
+
+  .card-tarefa.status-concluida {
+    background: #d4ffc4;
+  }
+
+  .card-tarefa.vencida {
+    border-left: 5px solid #d62828;
+  }
+
+  .selo-atrasada {
+    display: inline-block;
+    background: #ffe0e0;
+    color: #c0152a;
+    border: 1px solid #e66;
+    border-radius: 4px;
+    padding: 0 .4rem;
+    font-size: .75rem;
+    font-weight: 700;
+    margin-top: .3rem;
+  }
+
+  .card-tarefa h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 .3rem 0;
+  }
+
+  .card-tarefa .prazo {
+    font-size: .85rem;
+    color: #557;
+  }
+
+  .card-rodape {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: .8rem 0 .4rem 0;
+  }
+
+  .avatares {
+    display: flex;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #2e343a;
+    color: #fff;
+    font-size: .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    margin-right: -8px;
+  }
+
+  .prioridade {
+    font-size: .7rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+
+  .prioridade.alta {
+    background: #ffb3b3;
+    color: #b33;
+    border-color: #e66;
+  }
+
+  .prioridade.media {
+    background: #a8d4ff;
+    color: #2a6db0;
+    border-color: #5aa5ee;
+  }
+
+  .prioridade.baixa {
+    background: #d9d9d9;
+    color: #555;
+    border-color: #aaa;
+  }
+
+  .acoes {
+    display: flex;
+    gap: .8rem;
+    align-items: center;
+  }
+
+  .editar {
+    font-size: .8rem;
+  }
+
+  .excluir {
+    font-size: .8rem;
+    color: #b33;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .vazio {
+    color: #888;
+    font-size: .8rem;
+  }
+
+  .card-tarefa {
+    cursor: grab;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .card-tarefa:active {
+    cursor: grabbing;
+  }
+
+  .card-tarefa.arrastando {
+    opacity: 1;
+    transform: none;
+  }
+
+  .coluna.destino {
+    background-color: #eaf4ff;
+    outline: 2px dashed #0d6efd;
+    border-radius: 8px;
+  }
+
+  .coluna {
+    min-width: 0;
+  }
+
+  .area-tarefas {
+    min-height: 180px;
+    padding: 10px;
+    border: 2px dashed transparent;
+    border-radius: 8px;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  .card-tarefa {
+    user-select: none;
+  }
 </style>
 
 <div class="container mt-4">
@@ -36,7 +193,7 @@
     <select id="contato" name="contato" class="form-select w-auto" onchange="this.form.submit()">
       <option value="">Todos os contatos</option>
       {% for c in contatos %}
-      <option value="{{ c.id }}" {{ 'selected' if contato_filtrado == c.id else '' }}>{{ c.nome }}</option>
+      <option value="{{ c.id }}" {{ 'selected' if contato_filtrado==c.id else '' }}>{{ c.nome }}</option>
       {% endfor %}
     </select>
     <noscript><button type="submit" class="btn btn-secondary btn-sm">Filtrar</button></noscript>
@@ -49,17 +206,20 @@
 
   <div class="kanban">
     {% for chave, titulo in colunas %}
-      {% if chave == 'fazer' %}
-        {% set itens = tarefas | selectattr('status', 'in', ['fazer', 'atrasado']) | list %}
-      {% else %}
-        {% set itens = tarefas | selectattr('status', 'equalto', chave) | list %}
-      {% endif %}
-      <div class="coluna">
-        <h3>{{ titulo }} <span class="contador">{{ itens | length }}</span></h3>
+    {% if chave == 'fazer' %}
+    {% set itens = tarefas | selectattr('status', 'in', ['fazer', 'atrasado']) | list %}
+    {% else %}
+    {% set itens = tarefas | selectattr('status', 'equalto', chave) | list %}
+    {% endif %}
+    <div class="coluna" data-status="{{ chave }}">
+      <h3>{{ titulo }} <span class="contador">{{ itens | length }}</span></h3>
 
+      <div class="area-tarefas">
         {% for tarefa in itens %}
         {% set vencida = tarefa.status_final in ['atrasada', 'atrasado'] %}
-        <div class="card-tarefa status-{{ tarefa.status if tarefa.status in ['fazendo', 'concluida'] else 'fazer' }}{{ ' vencida' if vencida else '' }}">
+        <div
+          class="card-tarefa status-{{ tarefa.status if tarefa.status in ['fazendo', 'concluida'] else 'fazer' }}{{ ' vencida' if vencida else '' }}"
+          draggable="true" data-tarefa-id="{{ tarefa.id }}">
           <h4>{{ tarefa.descricao }}</h4>
           <div class="prazo">
             {% if tarefa.prazo %}{{ tarefa.prazo[8:10] }}/{{ tarefa.prazo[5:7] }}{% else %}Sem prazo{% endif %}
@@ -70,9 +230,9 @@
           <div class="card-rodape">
             <div class="avatares">
               {% for c in tarefa.contatos %}
-                <span class="avatar" title="{{ c.nome }}">{{ c.nome[0] | upper }}</span>
+              <span class="avatar" title="{{ c.nome }}">{{ c.nome[0] | upper }}</span>
               {% else %}
-                <span class="vazio">Sem responsável</span>
+              <span class="vazio">Sem responsável</span>
               {% endfor %}
             </div>
             <span class="prioridade {{ tarefa.prioridade }}">{{ tarefa.prioridade }}</span>
@@ -81,22 +241,151 @@
           <div class="acoes">
             <a class="editar" href="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa.id) }}">Editar tarefa</a>
             <form method="post" action="{{ url_for('tarefas.remover_tarefa', tarefa_id=tarefa.id) }}"
-                  onsubmit="return confirm('Excluir esta tarefa?');">
+              onsubmit="return confirm('Excluir esta tarefa?');">
               <button type="submit" class="excluir">Excluir</button>
             </form>
           </div>
         </div>
         {% else %}
-          <p class="vazio">Sem tarefas</p>
+        <p class="vazio mensagem-vazia">Sem tarefas</p>
         {% endfor %}
       </div>
+    </div>
     {% endfor %}
   </div>
 
   {% if not tarefas %}
-    <p class="text-muted mt-4">
-      {% if contato_filtrado %}Este contato não tem tarefas.{% else %}Nenhuma tarefa cadastrada.{% endif %}
-    </p>
+  <p class="text-muted mt-4">
+    {% if contato_filtrado %}Este contato não tem tarefas.{% else %}Nenhuma tarefa cadastrada.{% endif %}
+  </p>
   {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const cartoes = document.querySelectorAll('.card-tarefa');
+    const colunas = document.querySelectorAll('.coluna');
+
+    let cartaoArrastado = null;
+
+    cartoes.forEach(cartao => {
+      cartao.addEventListener('dragstart', function (evento) {
+        cartaoArrastado = cartao;
+
+        evento.dataTransfer.effectAllowed = 'move';
+        evento.dataTransfer.setData('text/plain', cartao.dataset.tarefaId);
+
+        // Cria uma cópia visual do cartão
+        const copia = cartao.cloneNode(true);
+
+        // Mantém a aparência e as cores originais
+        copia.style.opacity = '1';
+        copia.style.transform = 'none';
+        copia.style.position = 'fixed';
+        copia.style.top = '-1000px';
+        copia.style.left = '0';
+        copia.style.width = cartao.getBoundingClientRect().width + 'px';
+        copia.style.pointerEvents = 'none';
+
+        document.body.appendChild(copia);
+
+        // Usa a cópia como imagem durante o arrasto
+        evento.dataTransfer.setDragImage(copia, 20, 20);
+
+        // Remove a cópia auxiliar após iniciar o arrasto
+        requestAnimationFrame(() => {
+          copia.remove();
+        });
+      });
+      cartao.addEventListener('dragend', function () {
+        cartao.classList.remove('arrastando');
+
+        colunas.forEach(coluna => {
+          coluna.classList.remove('destino');
+        });
+
+        cartaoArrastado = null;
+      });
+    });
+
+    colunas.forEach(coluna => {
+      coluna.addEventListener('dragover', function (evento) {
+        evento.preventDefault();
+        evento.dataTransfer.dropEffect = 'move';
+        coluna.classList.add('destino');
+      });
+
+      coluna.addEventListener('dragleave', function () {
+        coluna.classList.remove('destino');
+      });
+
+      coluna.addEventListener('drop', async function (evento) {
+        evento.preventDefault();
+
+        if (!cartaoArrastado) return;
+        const cartaoMovido = cartaoArrastado;
+
+        const novoStatus = coluna.dataset.status;
+        const statusAtual = cartaoMovido.closest('.coluna').dataset.status;
+
+        if (novoStatus === statusAtual) return;
+
+        const tarefaId = cartaoMovido.dataset.tarefaId;
+
+        // Salva o novo status no banco
+        try {
+          const resposta = await fetch(`/tarefas/${tarefaId}/status`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              status: novoStatus
+            })
+          });
+
+          if (!resposta.ok) {
+            throw new Error(`Erro HTTP ${resposta.status}`);
+          }
+
+        } catch (erro) {
+          alert('Erro ao salvar a tarefa: ' + erro.message);
+          console.error(erro);
+          return;
+        }
+
+        // Move visualmente o cartão para a coluna escolhida
+        const areaTarefas = coluna.querySelector('.area-tarefas');
+        const mensagemVazia = areaTarefas.querySelector('.mensagem-vazia');
+
+        if (mensagemVazia && mensagemVazia.tagName === 'P') {
+          mensagemVazia.remove();
+        }
+
+        areaTarefas.appendChild(cartaoMovido);
+
+        cartaoMovido.classList.remove(
+          'status-fazer',
+          'status-fazendo',
+          'status-concluida'
+        );
+
+        cartaoMovido.classList.add('status-' + novoStatus);
+
+        // Atualiza os contadores das colunas
+        colunas.forEach(c => {
+          const contador = c.querySelector('.contador');
+
+          if (contador) {
+            contador.textContent =
+              c.querySelectorAll('.card-tarefa').length;
+          }
+        });
+
+        coluna.classList.remove('destino');
+      });
+    });
+  });
+</script>
+
 {% endblock %}
