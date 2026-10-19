@@ -24,3 +24,9 @@
 - [x] Instalar as dependências conforme o README
 - [x] Executar a aplicação
 - [x] Testar contatos, tarefas e Kanban
+
+## Issue #52 — Entregar o trabalho até as 18h
+
+- [x] Confirmar a versão final e documentação
+- [x] Conferir o link do repositório e os requisitos de entrega
+- [x] Realizar a entrega e registrar a confirmação
