@@ -18,3 +18,9 @@
 - [x] Conferir os commits de cada integrante
 - [x] Registrar a conferência
 
+## Issue #51 — Clonar o repositório do zero e rodar
+
+- [x] Clonar em uma pasta nova
+- [x] Instalar as dependências conforme o README
+- [x] Executar a aplicação
+- [x] Testar contatos, tarefas e Kanban
