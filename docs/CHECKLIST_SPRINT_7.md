@@ -69,3 +69,18 @@
 
 **Responsável:**  Anthony Figarella
 
+## Issue #47 — Fazer o merge das pendências
+
+> **Atenção:** não fazer merge de alterações de colegas sem revisão e autorização da equipe.
+
+- [x] Listar os Pull Requests pendentes.
+- [x] Confirmar que cada PR tem o destino correto (`main`).
+- [x] Verificar se os PRs passaram pelos testes necessários.
+- [x] Revisar conflitos e combinar sua resolução com os responsáveis.
+- [x] Obter as aprovações exigidas pela equipe.
+- [x] Fazer merge apenas dos PRs aprovados.
+- [x] Atualizar a branch `main` local com segurança, preservando alterações não commitadas.
+- [x] Executar um teste final de contatos, tarefas e Kanban após a integração.
+- [x] Registrar os PRs integrados e confirmar se restam pendências.
+
+**Responsável:**  Anthony Figarella
