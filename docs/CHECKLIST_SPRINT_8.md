@@ -12,3 +12,9 @@
 - [x] Criar a tag v1.0
 - [x] Publicar a tag no GitHub
 
+## Issue #50 — Conferir colaboradores e commits de todos
+
+- [x] Verificar os colaboradores do repositório
+- [x] Conferir os commits de cada integrante
+- [x] Registrar a conferência
+
