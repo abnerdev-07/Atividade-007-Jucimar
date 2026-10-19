@@ -5,16 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Equipe - Sistema Corporativo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/static.css') }}">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .navbar-custom {
+            background-color: #337ab7;
+        }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+            color: #ffffff !important;
+        }
+        .navbar-custom .nav-link:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand navbar-custom mb-4 py-3">
         <div class="container d-flex justify-content-between">
-            <a class="navbar-brand fw-semibold" href="{{ url_for('index') }}">Sistema Corporativo</a>
+            <a class="navbar-brand fw-semibold" href="#">Sistema Corporativo</a>
             <div class="navbar-nav">
-                <a class="nav-link px-3" href="{{ url_for('index') }}">Home</a>
-                <a class="nav-link px-3" href="{{ url_for('tarefas.listar') }}">Tarefas</a>
-                <a class="nav-link px-3" href="{{ url_for('contatos.listar_contatos') }}">Contatos</a>
+                <a class="nav-link px-3" href="#">Home</a>
+                <a class="nav-link px-3 fw-bold" href="{{ url_for('contatos.listar_contatos') }}">Contatos</a>
                 <a class="nav-link px-3" href="#">Sair</a>
             </div>
         </div>
@@ -25,5 +39,7 @@
         {% endblock %}
     </main>
 
+    <!-- Script necessário para componentes do Bootstrap se precisar -->
+    <script src="https://jsdelivr.net"></script>
 </body>
 </html>
