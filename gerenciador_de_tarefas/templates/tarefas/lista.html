@@ -2,90 +2,63 @@
 
 {% block content %}
 <style>
-  .kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; align-items: start; }
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; align-items: start; }
   .coluna h3 { font-size: 1.2rem; font-weight: 400; margin-bottom: .8rem; }
   .coluna .contador { background: #fff; border-radius: 6px; padding: 0 .45rem; font-size: .8rem; color: #999; }
-  .card-tarefa { background: #b9deff; border-radius: 4px; padding: .8rem; margin-bottom: .9rem; box-shadow: 2px 3px 4px rgba(0,0,0,.3); min-height: 90px; }
-  .card-tarefa.status-fazendo { background: #fff3b0; }
-  .card-tarefa.status-concluida { background: #d4ffc4; }
-  .card-tarefa.vencida { border-left: 5px solid #d62828; }
-  .selo-atrasada { display: inline-block; background: #ffe0e0; color: #c0152a; border: 1px solid #e66; border-radius: 4px; padding: 0 .4rem; font-size: .75rem; font-weight: 700; margin-top: .3rem; }
   .card-tarefa h4 { font-size: 1rem; font-weight: 600; margin: 0 0 .3rem 0; }
   .card-tarefa .prazo { font-size: .85rem; color: #557; }
   .card-rodape { display: flex; justify-content: space-between; align-items: center; margin: .8rem 0 .4rem 0; }
   .avatares { display: flex; align-items: center; }
   .avatar { width: 28px; height: 28px; border-radius: 50%; background: #2e343a; color: #fff; font-size: .75rem; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; margin-right: -8px; }
-  .prioridade { font-size: .7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px; border: 1px solid; text-transform: uppercase; }
-  .prioridade.alta { background: #ffb3b3; color: #b33; border-color: #e66; }
-  .prioridade.media { background: #a8d4ff; color: #2a6db0; border-color: #5aa5ee; }
-  .prioridade.baixa { background: #d9d9d9; color: #555; border-color: #aaa; }
-  .acoes { display: flex; gap: .8rem; align-items: center; }
   .editar { font-size: .8rem; }
-  .excluir { font-size: .8rem; color: #b33; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
   .vazio { color: #888; font-size: .8rem; }
+
+  @media (max-width: 992px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 576px) { .kanban { grid-template-columns: 1fr; } }
 </style>
 
 <div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-normal">Quadro de Tarefas</h2>
-    <a href="{{ url_for('tarefas.nova_tarefa') }}" class="btn btn-primary">+ Nova tarefa</a>
+    <a href="{{ url_for('tarefas.nova_tarefa') }}" class="btn btn-primary" style="padding: .5rem 1rem;">+ Nova tarefa</a>
   </div>
 
-  <form method="get" action="{{ url_for('tarefas.listar') }}" class="d-flex align-items-center gap-2 mb-4">
-    <label for="contato" class="mb-0">Filtrar por contato:</label>
-    <select id="contato" name="contato" class="form-select w-auto" onchange="this.form.submit()">
-      <option value="">Todos os contatos</option>
-      {% for c in contatos %}
-      <option value="{{ c.id }}" {{ 'selected' if contato_filtrado == c.id else '' }}>{{ c.nome }}</option>
-      {% endfor %}
-    </select>
-    <noscript><button type="submit" class="btn btn-secondary btn-sm">Filtrar</button></noscript>
-    {% if contato_filtrado %}
-    <a href="{{ url_for('tarefas.listar') }}">Limpar filtro</a>
-    {% endif %}
-  </form>
-
-  {% set colunas = [('fazer', 'Para fazer'), ('fazendo', 'Fazendo'), ('concluida', 'Concluída')] %}
+  {% set colunas = [
+    ('fazer', 'Para fazer'),
+    ('fazendo', 'Fazendo'),
+    ('feito', 'Feito'),
+    ('atrasado', 'Atrasado')
+  ] %}
 
   <div class="kanban">
     {% for chave, titulo in colunas %}
-      {% if chave == 'fazer' %}
-        {% set itens = tarefas | selectattr('status', 'in', ['fazer', 'atrasado']) | list %}
-      {% else %}
-        {% set itens = tarefas | selectattr('status', 'equalto', chave) | list %}
-      {% endif %}
+      {% set itens = tarefas | selectattr('status_final', 'equalto', chave) | list %}
+
       <div class="coluna">
         <h3>{{ titulo }} <span class="contador">{{ itens | length }}</span></h3>
 
         {% for tarefa in itens %}
-        {% set vencida = tarefa.status_final in ['atrasada', 'atrasado'] %}
-        <div class="card-tarefa status-{{ tarefa.status if tarefa.status in ['fazendo', 'concluida'] else 'fazer' }}{{ ' vencida' if vencida else '' }}">
-          <h4>{{ tarefa.descricao }}</h4>
-          <div class="prazo">
-            {% if tarefa.prazo %}{{ tarefa.prazo[8:10] }}/{{ tarefa.prazo[5:7] }}{% else %}Sem prazo{% endif %}
-          </div>
+          <div class="card-tarefa status-{{ tarefa.status_final }}">
+            <h4>{{ tarefa.descricao }}</h4>
 
-          {% if vencida %}<span class="selo-atrasada">⚠ Atrasada</span>{% endif %}
-
-          <div class="card-rodape">
-            <div class="avatares">
-              {% for c in tarefa.contatos %}
-                <span class="avatar" title="{{ c.nome }}">{{ c.nome[0] | upper }}</span>
-              {% else %}
-                <span class="vazio">Sem responsável</span>
-              {% endfor %}
+            <div class="prazo">
+              {% if tarefa.prazo %}{{ tarefa.prazo[8:10] }}/{{ tarefa.prazo[5:7] }}{% else %}Sem prazo{% endif %}
             </div>
-            <span class="prioridade {{ tarefa.prioridade }}">{{ tarefa.prioridade }}</span>
-          </div>
 
-          <div class="acoes">
+            <div class="card-rodape">
+              <div class="avatares">
+                {% for c in tarefa.contatos %}
+                  <span class="avatar" title="{{ c.nome }}">{{ c.nome[0] | upper }}</span>
+                {% else %}
+                  <span class="vazio">Sem responsável</span>
+                {% endfor %}
+              </div>
+              <span class="prioridade {{ tarefa.prioridade }}">{{ tarefa.prioridade }}</span>
+            </div>
+
             <a class="editar" href="{{ url_for('tarefas.editar_tarefa', tarefa_id=tarefa.id) }}">Editar tarefa</a>
-            <form method="post" action="{{ url_for('tarefas.remover_tarefa', tarefa_id=tarefa.id) }}"
-                  onsubmit="return confirm('Excluir esta tarefa?');">
-              <button type="submit" class="excluir">Excluir</button>
-            </form>
           </div>
-        </div>
         {% else %}
           <p class="vazio">Sem tarefas</p>
         {% endfor %}
@@ -94,9 +67,8 @@
   </div>
 
   {% if not tarefas %}
-    <p class="text-muted mt-4">
-      {% if contato_filtrado %}Este contato não tem tarefas.{% else %}Nenhuma tarefa cadastrada.{% endif %}
-    </p>
+    <p class="text-muted mt-4">Nenhuma tarefa cadastrada.</p>
   {% endif %}
+
 </div>
 {% endblock %}
