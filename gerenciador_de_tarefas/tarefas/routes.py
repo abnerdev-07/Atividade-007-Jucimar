@@ -1,11 +1,13 @@
 from flask import (
     Blueprint,
+    jsonify,
     render_template,
     request,
     redirect,
     url_for,
     abort,
-    flash
+    flash,
+    jsonify
 )
 
 from tarefas.models import (
@@ -14,7 +16,8 @@ from tarefas.models import (
     buscar_tarefa,
     atualizar_tarefa,
     excluir_tarefa,
-    status_efetivo
+    status_efetivo,
+    atualizar_status_tarefa
 )
 
 from contatos.models import buscar_todos_contatos
@@ -183,3 +186,18 @@ def remover_tarefa(tarefa_id):
         abort(404)
 
     return redirect(url_for("tarefas.listar"))
+
+@tarefas_bp.route("/tarefas/<int:tarefa_id>/status", methods=["POST"])
+def alterar_status_tarefa(tarefa_id):
+    dados = request.get_json(silent=True) or {}
+    novo_status = dados.get("status")
+
+    if novo_status not in ("fazer", "fazendo", "concluida"):
+        return jsonify({"erro": "Status inválido"}), 400
+
+    atualizada = atualizar_status_tarefa(tarefa_id, novo_status)
+
+    if not atualizada:
+        return jsonify({"erro": "Tarefa não encontrada"}), 404
+
+    return jsonify({"sucesso": True, "status": novo_status})

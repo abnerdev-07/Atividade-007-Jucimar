@@ -1,11 +1,11 @@
-from datetime import date
+﻿from datetime import date
 
 from database import get_connection
 
 
 def status_efetivo(tarefa):
-    """Devolve 'atrasada' se o prazo já passou e a tarefa não está concluída.
-    Caso contrário, devolve o status que está salvo."""
+    """Devolve 'atrasada' se o prazo jÃ¡ passou e a tarefa nÃ£o estÃ¡ concluÃ­da.
+    Caso contrÃ¡rio, devolve o status que estÃ¡ salvo."""
     status = tarefa["status"]
     prazo = tarefa["prazo"]
 
@@ -201,6 +201,20 @@ def excluir_tarefa(tarefa_id):
     except Exception:
         conn.rollback()
         raise
+
+    finally:
+        conn.close()
+
+def atualizar_status_tarefa(tarefa_id, novo_status):
+    conn = get_connection()
+
+    try:
+        cursor = conn.execute(
+            "UPDATE tarefas SET status = ? WHERE id = ?",
+            (novo_status, tarefa_id)
+        )
+        conn.commit()
+        return cursor.rowcount > 0
 
     finally:
         conn.close()
