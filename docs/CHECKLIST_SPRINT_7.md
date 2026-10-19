@@ -23,3 +23,18 @@
 - Data do teste: 19/10/2026
 - Responsável: Anthony Figarella
 
+## Issue #44 — Corrigir os bugs encontrados
+
+- [x] Reunir os bugs identificados na issue #43 e em outros testes.
+- [x] Descrever como reproduzir cada bug e qual seria o comportamento esperado.
+- [x] Priorizar os bugs que impedem o uso do sistema.
+- [x] Corrigir os bugs confirmados, com alterações pequenas e isoladas.
+- [x] Repetir os testes dos cenários corrigidos.
+- [x] Confirmar que as correções não quebraram contatos, tarefas ou Kanban.
+- [x] Registrar os commits ou PRs das correções.
+- [x] Confirmar que não restam bugs conhecidos impeditivos para a entrega.
+
+**Resultado / evidências:**
+
+- Data do teste: 19/10/2026
+- Responsável: Anthony Figarella

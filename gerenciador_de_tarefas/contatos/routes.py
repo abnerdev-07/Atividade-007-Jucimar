@@ -181,3 +181,4 @@ def filtrar_por_contato(contato_id):
         contato=contato,
         tarefas=tarefas_filtradas
     )
+    
