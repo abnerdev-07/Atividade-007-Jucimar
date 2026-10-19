@@ -55,3 +55,17 @@
 
 **Arquivo:** `README.md`  
 **Responsável:**  Anthony Figarella 
+
+## Issue #46 — Salvar o cronograma final na pasta `docs/`
+
+- [x] Localizar a versão mais recente do cronograma do projeto.
+- [x] Conferir etapas, responsáveis, prazos e situação real das entregas.
+- [x] Atualizar o cronograma final com base nas decisões da equipe.
+- [x] Salvar o cronograma final na pasta `docs/`.
+- [x] Usar um nome de arquivo claro e formato combinado pela equipe.
+- [x] Conferir se o arquivo abre e se as informações estão legíveis.
+- [x] Adicionar no README um link para o cronograma, se fizer sentido.
+- [x] Registrar o commit ou PR que contém o cronograma.
+
+**Responsável:**  Anthony Figarella
+
