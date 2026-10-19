@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 import config
 from database import init_db
 from contatos.routes import contatos_bp
@@ -10,6 +10,12 @@ app.register_blueprint(contatos_bp)
 app.register_blueprint(tarefas_bp)
 
 init_db()
+
+
+@app.route("/")
+def index():
+    return redirect(url_for("tarefas.listar"))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
